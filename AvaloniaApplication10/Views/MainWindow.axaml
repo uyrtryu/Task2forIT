@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:AvaloniaApplication10.ViewModels"
+        xmlns:models="using:AvaloniaApplication10.Models"
+        xmlns:avaloniaApplication10="clr-namespace:AvaloniaApplication10"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AvaloniaApplication10.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="AvaloniaApplication10">
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" Margin="10">
+        <!-- Выбор существа -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+            <TextBlock Text="Выберите существо:" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding Creatures}" SelectedItem="{Binding SelectedCreature}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        
+        
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,10">
+            <TextBlock Text="Информация:" Margin="0,0,0,5"/>
+            <TextBlock Text="{Binding SelectedCreature.Name, StringFormat='Имя: {0}'}" 
+                       IsVisible="{Binding SelectedCreature, Converter={x:Static avaloniaApplication10:ObjectToBoolConverter.Instance}}"/>
+        </StackPanel>
+        
+        
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,10,0">
+            <Button Content="Двигаться" Command="{Binding MoveCreature}" Margin="0,0,0,5"/>
+            <Button Content="Замедлиться" Command="{Binding StopCreature}" Margin="0,0,0,5"/>
+            <Button Content="Подать голос" Command="{Binding MakeSound}" 
+                    IsEnabled="{Binding CanRoar}" Margin="0,0,0,5"/>
+            <Button Content="Залезть/Слезть с дерева" Command="{Binding ToggleTreeClimbing}" 
+                    IsEnabled="{Binding CanClimbTree}"/>
+        </StackPanel>
+        
+       
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,10,0,0">
+            <TextBlock Text="Текущее действие:" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding OutputText}" IsReadOnly="True" Height="60" AcceptsReturn="True"/>
+            <TextBlock Text="История действий:" Margin="0,10,0,5"/>
+            <ListBox ItemsSource="{Binding ActionsHistory}" Height="200"/>
+        </StackPanel>
+    </Grid>
+</Window>
